@@ -17,23 +17,26 @@ public class PersonController {
     }
 
     @GetMapping("/people/")
-    public ResponseEntity<Iterable<Person>> index() {
-        return new ResponseEntity<>(service.index(), HttpStatus.OK);
+    public ResponseEntity<Iterable<Person>> findAll() {
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/people/{id}")
-    public ResponseEntity<Person> show(@PathVariable Long id) {
-        return new ResponseEntity<>(service.show(id), HttpStatus.OK);
+    public ResponseEntity<Person> find(@PathVariable Long id) {
+        return new ResponseEntity<>(service.find(id), HttpStatus.OK);
     }
 
-    @PostMapping("/people")
+    @PostMapping("/people/")
     public ResponseEntity<Person> create(@RequestBody Person person) {
         return new ResponseEntity<>(service.create(person), HttpStatus.CREATED);
     }
 
     @PutMapping("/people/{id}")
     public ResponseEntity<Person> update(@PathVariable Long id, @RequestBody Person person) {
-        return new ResponseEntity<>(service.update(id, person), HttpStatus.OK);
+        if(service.find(id) != null)
+            return new ResponseEntity<>(service.update(id, person), HttpStatus.OK);
+        else
+            return create(person);
     }
 
     @DeleteMapping("/people/{id}")

@@ -18,11 +18,11 @@ public class PersonService {
         this.repository = repository;
     }
 
-    public Iterable<Person> index() {
+    public Iterable<Person> findAll() {
         return repository.findAll();
     }
 
-    public Person show(Long id) {
+    public Person find(Long id) {
         return repository.findOne(id);
     }
 
