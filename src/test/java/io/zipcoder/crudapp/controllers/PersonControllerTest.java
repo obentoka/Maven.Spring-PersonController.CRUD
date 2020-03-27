@@ -24,10 +24,6 @@ public class PersonControllerTest {
     @Autowired
     private MockMvc mvc;
 
-
-    @MockBean
-    private PersonRepository repository;
-
     @MockBean
     private PersonService service;
 
