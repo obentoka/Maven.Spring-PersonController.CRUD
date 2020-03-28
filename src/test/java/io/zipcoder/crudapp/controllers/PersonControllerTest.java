@@ -1,8 +1,7 @@
 package io.zipcoder.crudapp.controllers;
 
 import io.zipcoder.crudapp.models.Person;
-import io.zipcoder.crudapp.ropositories.PersonRepository;
-import io.zipcoder.crudapp.services.PersonService;
+import io.zipcoder.crudapp.repositories.PersonRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -25,16 +24,16 @@ public class PersonControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private PersonService service;
+    private PersonRepository repository;
 
     @Test
     public void testShow() throws Exception {
         Long givenId = 1L;
         BDDMockito
-                .given(service.find(givenId))
-                .willReturn(new Person("Leon", "Bunter"));
+                .given(repository.findOne(givenId))
+                .willReturn(new Person("Leon", "Hunter"));
 
-        String expectedContent = "{\"id\":null,\"firstName\":\"Leon\",\"lastName\":\"Bunter\"}";
+        String expectedContent = "{\"id\":null,\"firstName\":\"Leon\",\"lastName\":\"Hunter\"}";
         this.mvc.perform(MockMvcRequestBuilders
                 .get("/people/" + givenId))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -43,12 +42,12 @@ public class PersonControllerTest {
 
     @Test
     public void testCreate() throws Exception {
-        Person person = new Person("Leon", "Bunter");
+        Person person = new Person("Leon", "Hunter");
         BDDMockito
-                .given(service.create(person))
+                .given(repository.save(person))
                 .willReturn(person);
 
-        String expectedContent="{\"id\":1,\"firstName\":\"Leon\",\"lastName\":\"Bunter\"}";
+        String expectedContent = "{\"id\":null,\"firstName\":\"Leon\",\"lastName\":\"Hunter\"}";
         this.mvc.perform(MockMvcRequestBuilders
                 .post("/people/")
                 .content(expectedContent)
