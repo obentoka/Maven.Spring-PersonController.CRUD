@@ -28,14 +28,23 @@ public class PersonService {
     }
 
     public Person update(Long id, Person newPersonData) {
-        Person originalPerson = repository.findOne(id);
-        originalPerson.setFirstName(newPersonData.getFirstName());
-        originalPerson.setLastName(newPersonData.getLastName());
-        return repository.save(originalPerson);
+        if(find(id) != null) {
+            Person originalPerson = repository.findOne(id);
+            originalPerson.setId(id);
+            originalPerson.setFirstName(newPersonData.getFirstName());
+            originalPerson.setLastName(newPersonData.getLastName());
+            return repository.save(originalPerson);
+        }
+        else {
+            return create(newPersonData);
+        }
     }
 
     public Boolean delete(Long id) {
-        repository.delete(id);
-        return true;
+        if(find(id) != null) {
+            repository.delete(id);
+            return true;
+        }
+        return false;
     }
 }

@@ -83,25 +83,80 @@ public class PersonControllerTest {
 
     @Test
     public void testUpdate() throws Exception{
-        Long givenID = 1L;
+        Long givenID = 1l;
         Person person = new Person("Leon", "Hunter");
         BDDMockito
                 .given(service.update(givenID, person))
                 .willReturn(person);
 
-        String expectedContent = "{\"id\":1,\"firstName\":\"Leon\",\"lastName\":\"Hunter\"}";
+        String expectedContent = "{\"id\":null,\"firstName\":\"Leon\",\"lastName\":\"Hunter\"}";
         this.mvc.perform(MockMvcRequestBuilders
                 .put("/people/" + givenID)
                 .content(expectedContent)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
         )
-                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string(expectedContent));
     }
 
     @Test
-    public void testDelete(){
+    public void testUpdate2() throws Exception{
+        Long givenID = 1l;
+        Person person = new Person("Leon", "Hunter");
+        service.create(person);
+        person.setFirstName("Leo");
+        person.setLastName("Hunt");
+        BDDMockito
+                .given(service.update(givenID, person))
+                .willReturn(person);
 
+        String expectedContent = "{\"id\":null,\"firstName\":\"Leo\",\"lastName\":\"Hunt\"}";
+        this.mvc.perform(MockMvcRequestBuilders
+                .put("/people/" + givenID)
+                .content(expectedContent)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string(expectedContent));
+    }
+
+    @Test
+    public void testDelete() throws Exception {
+        Long givenID = 1l;
+        BDDMockito
+                .given(service.delete(givenID))
+                .willReturn(false);
+
+        String expectedContent = "{\"id\":null,\"firstName\":\"Leon\",\"lastName\":\"Hunter\"}";
+        this.mvc.perform(MockMvcRequestBuilders
+                .delete("/people/" + givenID)
+                .content(expectedContent)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("false"));
+    }
+
+    @Test
+    public void testDelete2() throws Exception {
+        Long givenID = 1l;
+        Person person = new Person("Leon", "Hunter");
+        service.create(person);
+        BDDMockito
+                .given(service.delete(givenID))
+                .willReturn(true);
+
+        String expectedContent = "{\"id\":null,\"firstName\":\"Leon\",\"lastName\":\"Hunter\"}";
+        this.mvc.perform(MockMvcRequestBuilders
+                .delete("/people/" + givenID)
+                .content(expectedContent)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("true"));
     }
 }
