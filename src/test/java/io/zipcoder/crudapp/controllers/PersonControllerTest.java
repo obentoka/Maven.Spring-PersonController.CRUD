@@ -136,13 +136,13 @@ public class PersonControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
         )
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.content().string("false"));
     }
 
     @Test
     public void testDelete2() throws Exception {
-        Long givenID = 1l;
+        Long givenID = 1L;
         Person person = new Person("Leon", "Hunter");
         service.create(person);
         BDDMockito
@@ -156,7 +156,7 @@ public class PersonControllerTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
         )
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.content().string("true"));
     }
 }
